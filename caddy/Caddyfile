@@ -1,0 +1,36 @@
+{
+  debug
+}
+
+mediaserver.giacomorossi.dev:80 {
+  encode zstd gzip
+
+  header {
+    -Server
+    Cache-Control "no-store"
+  }
+
+  # --- Portainer su /portainer (HTTPS interno 9443, cert self-signed)
+  handle_path /portainer* {
+    reverse_proxy https://portainer:9443 {
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  # --- Jellyfin su /jellyfin (HTTP interno 8096)
+  handle_path /jellyfin* {
+    reverse_proxy jellyfin:8096
+  }
+
+  # (opzionale) aggiungi la slash finale
+  redir /portainer /portainer/ 308
+  redir /jellyfin /jellyfin/ 308
+
+  # --- Default: dashboard statico
+  handle {
+    root * /usr/share/caddy/dashboard
+    file_server
+  }
+}
