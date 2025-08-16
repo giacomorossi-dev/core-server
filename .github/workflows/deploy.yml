@@ -19,7 +19,7 @@ jobs:
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
-          remote_port: ${{ secrets.SSH_PORT }}
+          remote_port: 2222
 
       - name: Write .env
         uses: appleboy/ssh-action@v1.2.2
@@ -27,7 +27,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          port: 2222
           script_stop: true
           script: |
             set -Eeuo pipefail
