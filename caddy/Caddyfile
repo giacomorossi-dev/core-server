@@ -26,13 +26,29 @@ mediaserver.giacomorossi.dev:80 {
     Cache-Control "no-store"
   }
 
-  # --- Jellyfin su /jellyfin (HTTP interno 8096)
+  # JELLYFIN
   handle_path /jellyfin* {
     reverse_proxy jellyfin:8096
   }
-
-  # (opzionale) aggiungi la slash finale
   redir /jellyfin /jellyfin/ 308
+
+  # QBITTORRENT
+  handle_path /qbittorrent* {
+    reverse_proxy qbittorrent:8080
+  }
+  redir /qbittorrent /qbittorrent/ 308
+
+  # PROWLARR
+  handle_path /prowlarr* {
+    reverse_proxy prowlarr:9696
+  }
+  redir /prowlarr /prowlarr/ 308
+
+  # JACKETT
+  handle_path /jackett* {
+    reverse_proxy jackett:9117
+  }
+  redir /jackett /jackett/ 308
 
   # --- Default: dashboard statico
   handle {
