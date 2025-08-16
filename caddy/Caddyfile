@@ -50,7 +50,7 @@ mediaserver.giacomorossi.dev:80 {
   }
   redir /jackett /jackett/ 308
 
-  # --- Default: dashboard statico
+  # MEDIASERVER DASHBOARD
   handle {
     root * /usr/share/caddy/dashboard
     file_server

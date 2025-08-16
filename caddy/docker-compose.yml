@@ -7,7 +7,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
       - caddy-config:/config
-      #- /home/mediaserver/app/dashboard:/usr/share/caddy/dashboard:ro
+      - mediaserver-dashboard:/usr/share/caddy/mediaserver:ro
     networks:
       - proxy-public
 
