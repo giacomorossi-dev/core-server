@@ -11,40 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug secrets (safe)
-        run: |
-          set -Eeuo pipefail
-
-          to_len() { wc -c | tr -d ' '; }
-          to_lines() { wc -l | tr -d ' '; }
-
-          echo "::notice::SSH_HOST len: $(printf '%s' '${{ secrets.SSH_HOST }}' | to_len)"
-          echo "::notice::SSH_USER len: $(printf '%s' '${{ secrets.SSH_USER }}' | to_len)"
-          echo "::notice::SSH_PORT len: $(printf '%s' '${{ secrets.SSH_PORT }}' | to_len)"
-
-          echo "::notice::SSH_KEY lines: $(printf '%s' '${{ secrets.SSH_KEY }}' | to_lines)  chars: $(printf '%s' '${{ secrets.SSH_KEY }}' | to_len)"
-
-          # Verifica formale della chiave privata (stampa solo fingerprint, non il contenuto)
-          ssh-keygen -lf <(printf '%s' '${{ secrets.SSH_KEY }}') | sed 's/^/::notice::SSH_KEY fingerprint: /'
-
-      - name: Rsync repo to server
-        uses: burnett01/rsync-deployments@7.0.2
+      - name: Upload repo via SCP
+        uses: appleboy/scp-action@v1
         with:
-          switches: -az --delete --exclude ".git/" --exclude ".github/"
-          path: .
-          remote_path: /opt/core-server
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_KEY }}
-          remote_port: 2222
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "." # tutto il repo
+          target: "/opt/core-server" # cartella destinazione
+          rm: true # opzionale: pulisci target prima
+          overwrite: true
 
       - name: Write .env
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 2222
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
             set -Eeuo pipefail
