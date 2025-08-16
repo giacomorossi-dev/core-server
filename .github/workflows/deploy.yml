@@ -11,12 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate secrets
+      - name: Debug secrets (safe)
         run: |
-          test -n "${{ secrets.SSH_HOST }}" || { echo "SSH_HOST mancante"; exit 1; }
-          test -n "${{ secrets.SSH_USER }}" || { echo "SSH_USER mancante"; exit 1; }
-          test -n "${{ secrets.SSH_PORT }}" || { echo "SSH_PORT mancante"; exit 1; }
-          test -n "${{ secrets.SSH_KEY }}"  || { echo "SSH_KEY mancante"; exit 1; }
+          set -Eeuo pipefail
+
+          to_len() { wc -c | tr -d ' '; }
+          to_lines() { wc -l | tr -d ' '; }
+
+          echo "::notice::SSH_HOST len: $(printf '%s' '${{ secrets.SSH_HOST }}' | to_len)"
+          echo "::notice::SSH_USER len: $(printf '%s' '${{ secrets.SSH_USER }}' | to_len)"
+          echo "::notice::SSH_PORT len: $(printf '%s' '${{ secrets.SSH_PORT }}' | to_len)"
+
+          echo "::notice::SSH_KEY lines: $(printf '%s' '${{ secrets.SSH_KEY }}' | to_lines)  chars: $(printf '%s' '${{ secrets.SSH_KEY }}' | to_len)"
+
+          # Verifica formale della chiave privata (stampa solo fingerprint, non il contenuto)
+          ssh-keygen -lf <(printf '%s' '${{ secrets.SSH_KEY }}') | sed 's/^/::notice::SSH_KEY fingerprint: /'
 
       - name: Rsync repo to server
         uses: burnett01/rsync-deployments@7.0.2
