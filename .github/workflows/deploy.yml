@@ -6,9 +6,17 @@ on:
 
 jobs:
   deploy:
+    environment: Prod
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate secrets
+        run: |
+          test -n "${{ secrets.SSH_HOST }}" || { echo "SSH_HOST mancante"; exit 1; }
+          test -n "${{ secrets.SSH_USER }}" || { echo "SSH_USER mancante"; exit 1; }
+          test -n "${{ secrets.SSH_PORT }}" || { echo "SSH_PORT mancante"; exit 1; }
+          test -n "${{ secrets.SSH_KEY }}"  || { echo "SSH_KEY mancante"; exit 1; }
 
       - name: Rsync repo to server
         uses: burnett01/rsync-deployments@7.0.2
