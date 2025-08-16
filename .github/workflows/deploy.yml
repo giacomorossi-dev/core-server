@@ -8,12 +8,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1) Il runner ha già i file del repo
       - uses: actions/checkout@v4
 
-      # 2) Sincronizza la cartella del repo -> /opt/infra sul server
       - name: Rsync repo to server
-        uses: burnett01/rsync-deployments@6.0
+        uses: burnett01/rsync-deployments@7.0.2
         with:
           switches: -az --delete --exclude ".git/" --exclude ".github/"
           path: .
@@ -23,9 +21,8 @@ jobs:
           remote_key: ${{ secrets.SSH_KEY }}
           remote_port: ${{ secrets.SSH_PORT }}
 
-      # 3) Scrivi i .env dai secrets e avvia gli stack
-      - name: Write .env and compose up
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Write .env
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
