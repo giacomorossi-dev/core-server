@@ -52,7 +52,7 @@ mediaserver.giacomorossi.dev:80 {
 
   # MEDIASERVER DASHBOARD
   handle {
-    root * /usr/share/caddy/dashboard
+    root * /usr/share/caddy/mediaserver/dashboard
     file_server
   }
 }
