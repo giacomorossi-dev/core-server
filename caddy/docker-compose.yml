@@ -16,6 +16,9 @@ volumes:
     name: caddy-data
   caddy-config:
     name: caddy-config
+  mediaserver-dashboard:
+    external: true
+    name: mediaserver-dashboard
 
 networks:
   proxy-public:
