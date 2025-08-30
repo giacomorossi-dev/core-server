@@ -34,7 +34,14 @@ mediaserver.giacomorossi.dev:80 {
 
   # QBITTORRENT
   handle_path /qbittorrent* {
-    reverse_proxy qbittorrent:8080
+    reverse_proxy qbittorrent:8080 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-For   "{remote}"
+      # 401 su asset ->
+      # header_up -Origin
+      # header_up -Referer
+    }
   }
   redir /qbittorrent /qbittorrent/ 308
 
