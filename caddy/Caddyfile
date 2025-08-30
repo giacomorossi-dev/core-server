@@ -39,7 +39,7 @@ mediaserver.giacomorossi.dev:80 {
   redir /qbittorrent /qbittorrent/ 308
 
   # PROWLARR
-  handle_path /prowlarr* {
+  handle /prowlarr* {
     reverse_proxy prowlarr:9696 {
       header_up X-Forwarded-Proto "https"
       header_up X-Forwarded-Host  "{host}"
