@@ -40,7 +40,11 @@ mediaserver.giacomorossi.dev:80 {
 
   # PROWLARR
   handle_path /prowlarr* {
-    reverse_proxy prowlarr:9696
+    reverse_proxy prowlarr:9696 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-Prefix "/prowlarr"
+    }
   }
   redir /prowlarr /prowlarr/ 308
 
