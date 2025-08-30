@@ -46,7 +46,11 @@ mediaserver.giacomorossi.dev:80 {
 
   # JACKETT
   handle_path /jackett* {
-    reverse_proxy jackett:9117
+    reverse_proxy jackett:9117 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-Prefix "/jackett"
+    }
   }
   redir /jackett /jackett/ 308
 
