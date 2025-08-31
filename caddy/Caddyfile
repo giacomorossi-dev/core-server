@@ -70,4 +70,25 @@ mediaserver.giacomorossi.dev:80 {
     root * /usr/share/caddy/mediaserver/dashboard
     file_server
   }
+
+  # RADARR
+  handle /radarr* {
+    reverse_proxy radarr:7878 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-Prefix "/radarr"
+    }
+  }
+  redir /radarr /radarr/ 308
+
+  # SONARR
+  handle /sonarr* {
+    reverse_proxy sonarr:8989 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-Prefix "/sonarr"
+    }
+  }
+  redir /sonarr /sonarr/ 308
+  
 }
