@@ -28,7 +28,11 @@ mediaserver.giacomorossi.dev:80 {
 
   # JELLYFIN
   handle_path /jellyfin* {
-    reverse_proxy jellyfin:8096
+    reverse_proxy jellyfin:8096 {
+      header_up X-Forwarded-Proto "https"
+      header_up X-Forwarded-Host  "{host}"
+      header_up X-Forwarded-Prefix "/jellyfin"
+    }
   }
   redir /jellyfin /jellyfin/ 308
 
@@ -90,5 +94,5 @@ mediaserver.giacomorossi.dev:80 {
     }
   }
   redir /sonarr /sonarr/ 308
-  
+
 }
