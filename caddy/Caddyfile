@@ -30,14 +30,12 @@ mediaserver.giacomorossi.dev:80 {
   redir /jellyfin /jellyfin/web/ 308
   redir /jellyfin/web /jellyfin/web/ 308
 
-  handle /jellyfin* {
+  handle_path /jellyfin* {
     reverse_proxy jellyfin:8096 {
       header_up X-Forwarded-Proto "https"
       header_up X-Forwarded-Host  "{host}"
-      header_up X-Forwarded-Prefix "/jellyfin"
     }
   }
-
 
   # QBITTORRENT
   handle_path /qbittorrent* {
