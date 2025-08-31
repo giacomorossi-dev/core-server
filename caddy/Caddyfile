@@ -34,7 +34,8 @@ mediaserver.giacomorossi.dev:80 {
       header_up X-Forwarded-Prefix "/jellyfin"
     }
   }
-  redir /jellyfin /jellyfin/ 308
+  redir /jellyfin /jellyfin/web/ 308
+  redir /jellyfin/web /jellyfin/web/ 308
 
   # QBITTORRENT
   handle_path /qbittorrent* {
